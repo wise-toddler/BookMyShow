@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { hideLoading, showLoading } from "../redux/loaderSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector} from "react-redux";
+import { setError,clearError } from "../redux/errorSlice";
 import { getAllMovies } from "../calls/movies";
 import { message, Row, Col, Input } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,7 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const error = useSelector((state) => state.error.message);  
 
   const getData = async () => {
     try {
@@ -19,12 +21,13 @@ const Home = () => {
       const response = await getAllMovies();
       if (response.success) {
         setMovies(response.data);
+        dispatch(clearError()); // Clear previous errors
       } else {
-        message.error(response.message);
+        dispatch(setError(response.message)); // Dispatch error to Redux
       }
       dispatch(hideLoading());
     } catch (err) {
-      message.error(err.message);
+      dispatch(setError(err.message)); // Dispatch error to Redux
       dispatch(hideLoading());
     }
   };
@@ -40,6 +43,7 @@ const Home = () => {
 
   return (
     <>
+      {error && <p className="error-message">{error}</p>}
       <Row className="justify-content-center w-100">
         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
           <Input

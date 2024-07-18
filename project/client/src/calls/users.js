@@ -1,4 +1,4 @@
-const {axiosInstance} = require('./index')
+const {axiosInstance} = require('./axiosSetup')
 
 //Register new User
 

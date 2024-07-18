@@ -6,6 +6,12 @@ import { RegisterUser } from "../calls/users";
 function Register() {
   const onFinish = async (values) => {
     console.log(values);
+    if (!values.role) {
+      console.log("sa")
+      // tell user to choose an option just below roles option
+      message.error("Please select an option!");
+      return;
+    }
     try {
       const response = await RegisterUser(values);
       if (response.success) {
@@ -75,17 +81,6 @@ function Register() {
                   placeholder="Enter the password"
                 ></Input>
               </Form.Item>
-
-              <Form.Item>
-                <Button
-                  block
-                  type="primary"
-                  htmlType="submit"
-                  style={{ fontSize: "1rem", fontWeight: "600" }}
-                >
-                  Sign Up
-                </Button>
-              </Form.Item>
               <Form.Item
                 label="Register as a Partner"
                 htmlFor="role"
@@ -104,6 +99,17 @@ function Register() {
                   </Radio.Group>
                 </div>
               </Form.Item>
+              <Form.Item>
+                <Button
+                  block
+                  type="primary"
+                  htmlType="submit"
+                  style={{ fontSize: "1rem", fontWeight: "600" }}
+                >
+                  Sign Up
+                </Button>
+              </Form.Item>
+
             </Form>
             <div>
               <p>

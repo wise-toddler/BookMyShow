@@ -1,4 +1,4 @@
-import { axiosInstance } from ".";
+import { axiosInstance } from "./axiosSetup";
 
 export const addTheatre = async (payload) => {
     try{
