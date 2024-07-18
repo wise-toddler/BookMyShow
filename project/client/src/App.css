@@ -306,3 +306,8 @@ hr{
     margin-bottom: 1rem;
   }
 }
+.error-message {
+  color: red;
+  font-size: 1.2em;
+  margin: 1em 0;
+}

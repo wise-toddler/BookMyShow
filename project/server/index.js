@@ -25,7 +25,19 @@ app.use('/api/theatres' , theatreRoute )
 app.use('/api/shows' , showRoute )
 app.use('/api/bookings' , bookingRoute )
 
+app.get('/api/verify-role', (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Unauthorized' });
+  
+    try {
+      const decoded = jwt.verify(token, 'your-secret-key');
+      res.json({ role: decoded.role });
+    } catch (err) {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+  });
 
+  
 const PORT = process.env.PORT || 8081
 
 

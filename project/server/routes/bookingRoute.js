@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const express = require("express");
 const stripe = require("stripe")(
   "sk_test_51JKPQWSJULHQ0FL7LbqLKOaIcjurlUcdP2hJQkXZw3txlhh0hFrEEEOTwdVxf6sWKqLIrerKpV5EfGvmvntYu7Mt00vJq4YQKL"
 );
@@ -9,13 +10,13 @@ const EmailHelper = require("../utils/emailSender");
 
 const endpointSecret = "whsec_774b9109545b45e18af845534afa4e7e0d144a1a57db46482ca7886c10cd5a5a";
 
- // Webhook endpoint 
+// Webhook endpoint 
 router.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
   console.log('Webhook Called')
   const sig = request.headers['stripe-signature'];
   let event;
 
-try {
+  try {
     event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
     response.status(400).send(`Webhook Error: ${err.message}`);
@@ -99,21 +100,21 @@ router.post("/book-show", async (req, res) => {
     });
 
     const populatedBooking = await Booking.findById(newBooking._id).populate("user")
-    .populate("show")
-    .populate({
-      path: "show",
-      populate: {
-        path: "movie",
-        model: "movies",
-      },
-    })
-    .populate({
-      path: "show",
-      populate: {
-        path: "theatre",
-        model: "theatres",
-      },
-    });
+      .populate("show")
+      .populate({
+        path: "show",
+        populate: {
+          path: "movie",
+          model: "movies",
+        },
+      })
+      .populate({
+        path: "show",
+        populate: {
+          path: "theatre",
+          model: "theatres",
+        },
+      });
 
 
     console.log("this is populated Booking", populatedBooking);
@@ -126,16 +127,16 @@ router.post("/book-show", async (req, res) => {
     });
 
     await EmailHelper("ticketTemplate.html", populatedBooking.user.email, {
-       name: populatedBooking.user.name,
-       movie : populatedBooking.show.movie.title,
-       theatre : populatedBooking.show.theatre.name,
-       date:populatedBooking.show.date,
-       time:populatedBooking.show.time,
-       seats : populatedBooking.seats,
-       amount : populatedBooking.seats.length * populatedBooking.show.ticketPrice,
-       transactionId : populatedBooking.transactionId,
-       
-       
+      name: populatedBooking.user.name,
+      movie: populatedBooking.show.movie.title,
+      theatre: populatedBooking.show.theatre.name,
+      date: populatedBooking.show.date,
+      time: populatedBooking.show.time,
+      seats: populatedBooking.seats,
+      amount: populatedBooking.seats.length * populatedBooking.show.ticketPrice,
+      transactionId: populatedBooking.transactionId,
+
+
 
     });
   } catch (err) {

@@ -56,9 +56,19 @@ export const ResetPassword = async (value) => {
 }
 
 
-
-
-
+// 
+export const verifyUserRole = async () => {
+  try {
+    const response = await axiosInstance.get('api/users/verify-role', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data.role;
+  } catch (error) {
+    throw new Error(error.response?.data || 'Unable to verify role');
+  }
+};
 
 
 

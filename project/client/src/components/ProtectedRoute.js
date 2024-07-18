@@ -18,7 +18,7 @@ function ProtectedRoute({ children }) {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   const navItems = [
     {
       label: "Home",
@@ -32,15 +32,15 @@ function ProtectedRoute({ children }) {
         {
           label: (
             <span
-            onClick={() => {
-              if (user.role === 'admin') {
-                navigate("/admin");
-              } else if (user.role === 'partner') {
-                navigate("/partner");
-              } else {
-                navigate("/profile");
-              }
-            }}
+              onClick={() => {
+                if (user.role === 'admin') {
+                  navigate("/admin");
+                } else if (user.role === 'partner') {
+                  navigate("/partner");
+                } else {
+                  navigate("/profile");
+                }
+              }}
             >
               My Profile
             </span>
@@ -69,13 +69,17 @@ function ProtectedRoute({ children }) {
     try {
       dispatch(showLoading());
       const response = await GetCurrentUser();
-      console.log(response)
       dispatch(setUser(response.data));
+      console.log(response)
+      setLoading(false);
       dispatch(hideLoading());
       // Hide Loader
     } catch (error) {
       dispatch(setUser(null));
+      setLoading(false);
       message.error(error.message);
+      // navigate("/login");
+
     }
   };
 
@@ -87,6 +91,9 @@ function ProtectedRoute({ children }) {
     }
   }, []);
 
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
   return (
     user && (
       <>

@@ -14,6 +14,7 @@ import Partner from "./pages/Partner";
 import Forget from "./pages/Forget";
 import Reset from "./pages/Reset";
 
+
 function App() {
   const { loading } = useSelector((state) => state.loader);
 

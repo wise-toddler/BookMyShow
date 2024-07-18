@@ -7,7 +7,7 @@ function Register() {
   const onFinish = async (values) => {
     console.log(values);
     if (!values.role) {
-      console.log("sa")
+      // console.log("sa")
       // tell user to choose an option just below roles option
       message.error("Please select an option!");
       return;
